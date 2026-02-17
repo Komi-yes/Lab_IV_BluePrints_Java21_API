@@ -1,0 +1,44 @@
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker Compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+services:
+  server:
+    build:
+      context: .
+    ports:
+      - 8080:8080
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/BlueprintsDB
+      - SPRING_DATASOURCE_USERNAME=blueprints
+      - SPRING_DATASOURCE_PASSWORD=Password123
+  db:
+    image: postgres:18
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql
+    environment:
+      - POSTGRES_DB=BlueprintsDB
+      - POSTGRES_USER=blueprints
+      - POSTGRES_PASSWORD=Password123
+    secrets:
+      - db-password
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U blueprints -d BlueprintsDB" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+   db-data:
+secrets:
+   db-password:
+     file: db/password.txt
