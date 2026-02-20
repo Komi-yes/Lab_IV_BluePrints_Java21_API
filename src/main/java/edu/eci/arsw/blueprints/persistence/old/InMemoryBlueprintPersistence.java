@@ -2,9 +2,9 @@ package edu.eci.arsw.blueprints.persistence.old;
 
 import edu.eci.arsw.blueprints.model.Blueprint;
 import edu.eci.arsw.blueprints.model.Point;
-import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
-import edu.eci.arsw.blueprints.persistence.BlueprintPersistence;
-import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
+import edu.eci.arsw.blueprints.persistence.impl.BlueprintNotFoundException;
+import edu.eci.arsw.blueprints.persistence.impl.BlueprintPersistence;
+import edu.eci.arsw.blueprints.persistence.impl.BlueprintPersistenceException;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;

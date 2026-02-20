@@ -20,6 +20,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/BlueprintsDB
       - SPRING_DATASOURCE_USERNAME=blueprints
       - SPRING_DATASOURCE_PASSWORD=Password123
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-Identity}
   db:
     image: postgres:18
     restart: always
