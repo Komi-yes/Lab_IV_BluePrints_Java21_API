@@ -5,6 +5,7 @@ import edu.eci.arsw.blueprints.model.Point;
 import edu.eci.arsw.blueprints.persistence.impl.BlueprintNotFoundException;
 import edu.eci.arsw.blueprints.persistence.impl.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.services.BlueprintsServices;
+import edu.eci.arsw.blueprints.socket.SocketIOClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,8 +28,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/blueprints")
 public class BlueprintsAPIController {
     private final BlueprintsServices services;
-    public BlueprintsAPIController(BlueprintsServices services) {
+    private final SocketIOClientService socketIOClient;
+
+    public BlueprintsAPIController(BlueprintsServices services, SocketIOClientService socketIOClient) {
         this.services = services;
+        this.socketIOClient = socketIOClient;
     }
     // GET /api/v1/blueprints
     @Operation(
@@ -161,6 +165,9 @@ public class BlueprintsAPIController {
             @RequestBody Point p) {
         try {
             services.addPoint(author, bpname, p.x(), p.y());
+
+            socketIOClient.sendDrawEvent(author, bpname, p);
+
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                     new ApiResponse<>(202, "Point added successfully", null)
             );

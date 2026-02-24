@@ -3,6 +3,8 @@ package edu.eci.arsw.blueprints.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Embeddable;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -19,6 +21,17 @@ public class Point {
                  @JsonProperty("y") int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public JSONObject toJSONObject() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("x", this.x);
+            json.put("y", this.y);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        return json;
     }
 
     public int getX() { return x; }

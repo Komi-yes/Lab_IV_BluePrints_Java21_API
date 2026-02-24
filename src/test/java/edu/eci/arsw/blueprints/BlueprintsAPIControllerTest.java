@@ -6,9 +6,13 @@ import edu.eci.arsw.blueprints.model.Blueprint;
 import edu.eci.arsw.blueprints.persistence.impl.BlueprintNotFoundException;
 import edu.eci.arsw.blueprints.persistence.impl.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.services.BlueprintsServices;
+import edu.eci.arsw.blueprints.socket.SocketIOClientService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.autoconfigure.websocket.servlet.WebSocketMessagingAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -24,7 +28,12 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(BlueprintsAPIController.class)
+@WebMvcTest(controllers = BlueprintsAPIController.class,
+        excludeAutoConfiguration = {
+                DataSourceAutoConfiguration.class,
+                HibernateJpaAutoConfiguration.class,
+                WebSocketMessagingAutoConfiguration.class
+        })
 class BlueprintsAPIControllerTest {
 
     @Autowired
@@ -32,6 +41,9 @@ class BlueprintsAPIControllerTest {
 
     @MockBean
     private BlueprintsServices services;
+
+    @MockBean
+    private SocketIOClientService socketIOClientService;
 
     @Autowired
     private ObjectMapper objectMapper;

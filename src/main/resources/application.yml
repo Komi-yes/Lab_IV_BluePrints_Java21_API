@@ -16,3 +16,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+socketio:
+  url: ${SOCKETIO_URL:http://host.docker.internal:3001}
